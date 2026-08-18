@@ -1,668 +1,694 @@
-ERIS — Emergency Response Intelligence System
-PRODUCT
+ERIS — Product Specification
 
-Name: ERIS
+AI-powered multilingual emergency response assistant integrating voice, maps, and hospitals.
 
-One-line description:
-A multilingual, voice-first emergency assistant that understands an emergency, detects the user's location, finds nearby suitable emergency hospitals, and guides the user to the best available option.
+1. Overview
 
-Target user:
-A person experiencing an emergency or a bystander helping someone during an emergency, especially when they are stressed, unable to type, unfamiliar with the area, or more comfortable speaking a regional language.
+ERIS is a voice-first multilingual emergency assistant designed to help people quickly identify appropriate nearby emergency facilities during stressful situations.
 
-MVP positioning:
-ERIS is an emergency assistance and navigation tool, not a medical diagnosis system. AI interprets the user's description; verified application logic and external services handle location, hospital discovery, ranking, and navigation.
+A user can describe an emergency naturally in a supported language. ERIS uses AI to understand the emergency, obtains the user's location, finds nearby emergency-capable hospitals, ranks the available options, and provides map-based navigation.
 
-CORE USER JOURNEY
-Step 1: Speak
+Core principle
 
-The user taps "Speak Emergency" and describes the situation naturally in a supported language.
+AI understands the emergency. Deterministic application logic finds and ranks hospitals. Maps provide navigation.
+
+ERIS is an emergency assistance and navigation tool, not a medical diagnosis system.
+
+2. Problem
+
+During an emergency, people may:
+
+be too stressed to type
+have difficulty communicating
+speak a regional language
+not know their exact location
+not know which nearby hospital is appropriate
+waste time searching through maps or hospital listings
+
+Existing tools solve individual parts of the problem, but the user often has to combine multiple services themselves.
+
+ERIS combines the critical steps into one workflow:
+
+Voice
+  ↓
+Emergency Understanding
+  ↓
+Location
+  ↓
+Hospital Discovery
+  ↓
+Hospital Ranking
+  ↓
+Map
+  ↓
+Navigation
+3. Target Users
+Primary
+
+People experiencing an emergency.
+
+Secondary
+
+Bystanders helping someone during an emergency.
+
+Example scenarios
+Accident / trauma
+Severe bleeding
+Breathing difficulty
+Chest pain
+Unconsciousness
+Stroke-like symptoms
+Other urgent situations
+4. Product Goals
+
+The MVP should:
+
+Allow users to describe an emergency using voice.
+Support multiple languages.
+Understand and categorize the emergency.
+Detect the user's location.
+Find nearby hospitals/emergency facilities.
+Rank suitable facilities.
+Display the recommendation on a map.
+Provide navigation to the selected facility.
+Work reliably within a 24-hour hackathon environment.
+5. Non-Goals
+
+The MVP will not attempt to build:
+
+Medical diagnosis
+Patient medical records
+User accounts
+Hospital management systems
+Ambulance fleet tracking
+Real-time hospital bed management
+Hospital booking
+Wearable integration
+Custom-trained medical AI
+Native Android/iOS applications
+Complex analytics
+Payment systems
+6. Core User Journey
+Step 1 — Speak
+
+The user taps Speak Emergency and describes the situation naturally.
 
 Example:
 
 "Mere bhai ka accident ho gaya hai aur bahut khoon nikal raha hai."
 
-Step 2: Understand
+Step 2 — Understand
 
-ERIS converts speech to text and uses AI to extract:
+ERIS:
 
-language
-emergency category
-urgency
-relevant symptoms/context
-
-ERIS then gives a short confirmation in the user's language.
-
-Step 3: Find
-
-ERIS obtains the user's location and searches for nearby emergency-capable hospitals.
-
-The system ranks a small number of options using:
-
-suitability for the emergency
-distance
-estimated travel time
-available verified hospital information
-Step 4: Guide
-
-ERIS displays the recommended hospital on a map with:
-
-hospital name
-distance
-estimated travel time
-relevant emergency capability
-navigation button
-
-The user can open navigation and proceed to the facility.
-
-FEATURES
-P0 — Absolutely required for the demo
-1. Emergency voice input
-Large emergency voice button
-Record user speech
-Convert speech to text
-Display transcription
-2. Multilingual interaction
-Support at least 2 languages for the demo
-Detect or allow selection of language
-Respond in the user's language
-
-The exact languages should be finalized based on API quality and the hackathon audience.
-
-3. Emergency intent extraction
-
-AI extracts a structured emergency category from the user's description.
+converts speech to text
+detects/uses the selected language
+identifies the emergency category
+estimates urgency
+generates a short response
 
 Example:
 
 {
+  "language": "hi",
   "emergency_type": "severe_bleeding",
-  "urgency": "high"
+  "urgency": "high",
+  "requires_emergency_facility": true
 }
-4. Location detection
-Request browser/device location permission
-Obtain latitude/longitude
-Show detected location
-Provide a manual fallback if location permission fails
-5. Nearby hospital search
+Step 3 — Find
 
-Find nearby hospitals/emergency facilities using an external map/places service or organizer-provided hospital dataset.
+ERIS obtains the user's location and searches for nearby hospitals.
 
-6. Hospital ranking
+Results are ranked using available verified information such as:
 
-Return a small set of relevant options, preferably 3.
-
-Ranking should consider:
-
-emergency suitability
-distance
-travel time
-available verified facility information
-7. Map visualization
-
-Show:
-
-user's location
-recommended hospital
-nearby alternatives
-route or route-launch option
-8. Recommended hospital
-
-Clearly identify one recommended option.
-
-Example:
-
-Recommended Emergency Facility
-
-with a short explanation such as:
-
-"Nearby facility listed with emergency services."
-
-Do not claim real-time bed availability or specialist availability unless the data source actually provides it.
-
-9. Navigation
-
-A prominent:
-
-Navigate to Hospital
-
-button that opens the supported navigation service.
-
-10. Emergency-safe messaging
-
-ERIS should communicate that serious situations require immediate professional/emergency medical help.
-
-It should not diagnose the user.
-
-P1 — Useful if time permits
-1. Text-to-speech
-
-Read ERIS's important response aloud.
-
-2. Emergency instruction card
-
-A short, predefined instruction appropriate to the detected emergency category.
-
-Keep this conservative and medically reviewed.
-
-3. One-tap emergency call
-
-Only if permitted by the hackathon and technically reliable in the demo environment.
-
-The emergency number must be determined from the deployment region rather than hardcoded blindly.
-
-4. Share location
-
-Generate a shareable location/action for a trusted person.
-
-5. Language selector
-
-Allow the user to explicitly choose a supported language instead of relying entirely on automatic detection.
-
-6. Hospital details
-
-Show verified information such as:
-
-address
-phone number
-emergency service indicator
+emergency capability
 distance
 estimated travel time
-P2 — Do not build unless everything else is finished
-User accounts
+facility information
+Step 4 — Navigate
+
+ERIS displays the recommended facility on a map and allows the user to launch navigation.
+
+7. MVP Features
+P0 — Required
+Voice input
+Record emergency description.
+Convert speech to text.
+Display transcription.
+Multilingual support
+Support at least two languages for the demo.
+Allow language selection where necessary.
+Respond in the user's language.
+Emergency understanding
+
+AI extracts:
+
+language
+emergency type
+urgency
+whether emergency care is required
+Location
+Request browser/device location.
+Obtain latitude and longitude.
+Handle location permission failure.
+Hospital search
+Search nearby hospitals/emergency facilities.
+Retrieve relevant facility information.
+Hospital ranking
+
+Rank results based on deterministic application logic.
+
+Map
+
+Display:
+
+user location
+recommended hospital
+alternative hospitals
+route where supported
+Navigation
+
+Provide a Navigate action that opens the selected map/navigation service.
+
+Safety messaging
+
+ERIS must not present a definitive medical diagnosis.
+
+8. P1 Features
+
+Implement only after the P0 flow works reliably.
+
+Text-to-speech
+Emergency instruction cards
+One-tap emergency calling
+Share location
+Hospital phone number
+Hospital detail view
+More language options
+9. P2 Features
+
+Do not implement unless the complete MVP is finished.
+
 Authentication
-Patient profiles
+Patient accounts
 Medical history
 Medical records
-Hospital administration dashboard
+Hospital dashboard
 Hospital staff dashboard
-Ambulance fleet tracking
-Real-time ambulance dispatch
-Real-time hospital bed management
+Ambulance tracking
+Real-time bed availability
 Wearable integration
-IoT sensors
-Custom-trained medical AI model
-Native Android/iOS applications
-Full hospital booking system
-Complex analytics dashboard
-Payment system
-Multi-hospital messaging
-Continuous background location tracking
-PAGES
-PAGE 1 — Emergency Home
+Native mobile applications
+Hospital booking
+Advanced analytics
+Custom AI model
+10. Application Pages
+10.1 Emergency Home
 Purpose
 
-Immediately communicate what ERIS does and get the user into the emergency flow with minimal interaction.
+Provide an immediate, simple entry point into the emergency workflow.
 
-UI elements
-ERIS logo/name
-Emergency status/instruction
+UI
+ERIS logo
+Emergency status
 Large Speak Emergency button
-Language indicator/selector
-"Use my location" status
-Optional small safety disclaimer
-User actions
-Tap Speak Emergency
-Select language if necessary
+Language selector
+Location status
+Short safety disclaimer
+Actions
+Start emergency recording
+Select language
 Grant location permission
-Data required
-Supported languages
-Location permission state
-Basic application configuration
-API calls required
-
-Potentially none initially.
-
-Location can be obtained directly from the browser/device.
-
-PAGE 2 — Voice / Emergency Understanding
+10.2 Emergency Understanding
 Purpose
 
-Capture the emergency description and show that ERIS understood it.
+Show the user that ERIS understood their emergency.
 
-UI elements
-Recording animation
-Microphone state
-Transcribed speech
-Detected language
+UI
+Recording indicator
+Transcription
+Detected/selected language
 Emergency category
-Urgency indicator
-Short AI response
-Find Emergency Hospital button
-User actions
-Start recording
-Stop recording
-Review transcription
-Retry recording
-Continue
-Data required
-audio
-transcription
-language
-emergency_type
-urgency
-API calls required
-Speech-to-text API
-AI structured extraction API
-PAGE 3 — Hospital Results / Emergency Map
+Urgency
+Short response
+Continue button
+Actions
+Start/stop recording
+Retry
+Continue to hospital search
+10.3 Hospital Results
 Purpose
 
-Show the best nearby emergency facilities and make the recommended choice obvious.
+Show nearby emergency facilities and identify the recommended option.
 
-UI elements
-Map
-User location marker
-Recommended hospital marker
-Alternative hospital markers
+UI
+Interactive map
+User location
+Hospital markers
 Recommended hospital card
-Hospital name
+Alternative hospitals
 Distance
 Estimated travel time
-Emergency capability indicator
+Emergency capability
 Navigate button
-Optional alternative hospitals
-User actions
-Select recommended hospital
-Select alternative hospital
-View hospital details
+Actions
+Select hospital
+View details
 Start navigation
-Data required
-user_latitude
-user_longitude
-emergency_type
-hospital_name
-hospital_location
-hospital_capabilities
-distance
-travel_time
-navigation_destination
-API calls required
-Places/hospital search API
-Routing/directions API
-Optional geocoding API
-PAGE 4 — Hospital Detail / Navigation
+10.4 Hospital Detail
 Purpose
 
-Give the user enough information to confidently proceed to the selected facility.
+Provide final information before navigation.
 
-UI elements
+UI
 Hospital name
 Address
 Distance
 Estimated travel time
 Emergency capability
 Map/route
-Navigate Now button
-Optional phone button if verified
-User actions
-Start navigation
-Call hospital if available
-Return to hospital list
-Data required
+Navigate button
+Phone button if verified
+11. System Architecture
+                         USER
+                           |
+                           v
+                  +----------------+
+                  | React Frontend |
+                  | Vite + TS      |
+                  +-------+--------+
+                          |
+                         HTTPS
+                          |
+                          v
+                 +-------------------+
+                 | Node.js Backend   |
+                 | Express           |
+                 +---------+---------+
+                           |
+              +------------+------------+
+              |                         |
+              v                         v
+       +-------------+          +---------------+
+       | AI Provider |          | Maps/Places   |
+       | Speech + LLM|          | + Routing     |
+       +-------------+          +---------------+
+              |                         |
+              +------------+------------+
+                           |
+                           v
+                    +-------------+
+                    | Supabase    |
+                    | PostgreSQL  |
+                    +-------------+
+12. Technology Stack
+Component	Technology
+Frontend	React + Vite + TypeScript
+Styling	Tailwind CSS
+UI components	shadcn/ui
+Backend	Node.js + Express + TypeScript
+Database	Supabase PostgreSQL
+AI	One approved LLM provider
+Speech-to-text	AI/speech API
+Maps	Google Maps Platform or Mapbox
+Authentication	None
+File storage	None for MVP
+Frontend hosting	Vercel
+Backend hosting	Render
+Source control	GitHub
 
-Selected hospital record and route information.
+The final AI and maps providers should depend on hackathon rules, available credits, and API access.
 
-API calls required
-Routing API if route wasn't already obtained
-External navigation service/deep link
-BACKEND
+13. Backend Responsibilities
 
-The backend should remain deliberately small.
+The backend acts as the main orchestration layer.
 
-1. Emergency request processing
+Required capabilities
+Receive emergency audio.
+Send audio to speech-to-text.
+Send transcription to the LLM.
+Validate structured AI output.
+Search nearby hospitals.
+Retrieve routing information.
+Rank hospitals.
+Return a normalized response to the frontend.
+Store optional emergency session information.
+Handle API failures safely.
+14. API Endpoints
 
-Accept:
+The MVP should expose as few endpoints as possible.
 
-user transcription
+GET /api/health
+
+Health check.
+
+Response
+{
+  "status": "ok"
+}
+POST /api/emergency/analyze
+
+Main ERIS endpoint.
+
+Request
+
+multipart/form-data
+
+audio
 language
-approximate/location coordinates
-emergency context
+latitude
+longitude
+Processing
+Audio
+  ↓
+Speech-to-text
+  ↓
+Emergency classification
+  ↓
+Hospital search
+  ↓
+Routing
+  ↓
+Hospital ranking
+Response
+{
+  "sessionId": "abc123",
+  "transcription": "Mere bhai ka accident ho gaya hai...",
+  "emergency": {
+    "type": "severe_bleeding",
+    "urgency": "high"
+  },
+  "message": "Yeh serious emergency ho sakti hai. Turant medical help lein.",
+  "recommendedHospital": {
+    "id": "hospital_123",
+    "name": "Example Hospital",
+    "latitude": 21.15,
+    "longitude": 79.09,
+    "distanceKm": 2.3,
+    "durationMinutes": 6,
+    "emergencyCapable": true
+  },
+  "alternatives": []
+}
 
-Return structured emergency information.
+For the 24-hour MVP, this single business endpoint is preferred over creating many separate API endpoints.
 
-2. AI orchestration
+15. AI Architecture
 
-Send the user's text to the AI service and request structured output.
+AI is used only where natural-language understanding is required.
+
+Speech-to-text
+User voice
+    ↓
+Speech API
+    ↓
+Transcription
+Emergency classification
+Transcription
+    ↓
+LLM
+    ↓
+Structured JSON
 
 Example:
 
 {
-  "language": "Hindi",
+  "language": "hi",
   "emergency_type": "severe_bleeding",
   "urgency": "high",
   "requires_emergency_facility": true
 }
+Response generation
 
-The backend validates the returned structure before using it.
+The LLM can generate a short response in the user's language.
 
-3. Hospital search
+AI must not
+diagnose the patient
+invent hospital information
+claim real-time bed availability without a verified source
+directly select a hospital
+control navigation
 
-Accept:
+Hospital selection remains deterministic application logic.
 
-latitude
-longitude
-emergency_type
+16. Hospital Ranking
 
-Query the hospital/places data source.
+Hospital ranking should be performed by normal backend code.
 
-4. Hospital normalization
+Conceptually:
 
-Convert different external API results into a consistent ERIS format:
-
-name
-address
-latitude
-longitude
-emergency_capability
-phone
-source
-5. Hospital ranking
-
-Rank results using deterministic application logic.
-
-The LLM should not decide the final ranking by itself.
-
-Example conceptual scoring:
-
-hospital suitability
+Hospital suitability
         +
-distance
+Emergency capability
         +
-travel time
+Distance
         +
-verified emergency capability
+Travel time
+        ↓
+Final ranking
 
-The exact scoring weights can be adjusted during testing.
+The exact weighting can be adjusted based on available API data.
 
-6. Routing
+The LLM should not determine the final ranking.
 
-Request travel distance/time from the map/routing provider.
+17. Database
 
-7. Safety rules
+The database is intentionally minimal.
 
-The backend should:
+emergency_sessions
+Field	Type
+id	UUID
+created_at	timestamp
+language	string
+transcription	text
+emergency_type	string
+urgency	string
+latitude	decimal
+longitude	decimal
+selected_hospital_id	string
 
-prevent unsupported medical diagnoses
-avoid inventing hospital capabilities
-avoid claiming real-time availability without real-time data
-provide emergency escalation messaging
-handle missing location
-handle failed APIs gracefully
-8. API error handling
+No unnecessary personal information should be stored.
 
-The system must gracefully handle:
+hospitals
 
-microphone failure
-speech-to-text failure
-AI failure
-location permission denial
-hospital API failure
-routing API failure
-no nearby hospitals
-DATABASE
+This table is optional.
 
-For a 24-hour MVP, a database should be minimal.
+Use it only if the hackathon provides a hospital dataset or if hospital information needs to be cached.
 
-If persistence is not required by the judging criteria, the application can operate largely without a database.
+Field	Type
+id	string
+name	string
+address	string
+latitude	decimal
+longitude	decimal
+phone	string
+emergency_capability	boolean
+specialties	JSON
+source	string
+last_verified_at	timestamp
 
-Entity 1 — Emergency Sessions
+If the maps/places provider already supplies the required information, this table can be omitted.
 
-Fields:
+18. Authentication
 
-id
-created_at
-language
-transcription
-emergency_type
-urgency
-latitude
-longitude
-selected_hospital_id
+Authentication is not required for the MVP.
 
-Purpose:
+Users can access ERIS anonymously.
 
-debugging
-demo/session state
-optional analytics
+This reduces:
 
-Do not store unnecessary personal medical information.
+development time
+UI complexity
+database complexity
+security requirements
+19. File Storage
 
-Entity 2 — Hospitals
+Permanent audio storage is not required.
 
-Only create this table if the organizers provide a hospital dataset or if we need to cache/normalize hospital information.
+Preferred flow:
 
-Fields:
+Browser
+   ↓
+Audio
+   ↓
+Backend
+   ↓
+Speech-to-text
+   ↓
+Discard audio
 
-id
-name
-address
-latitude
-longitude
-phone
-emergency_capability
-specialties
-source
-last_verified_at
-Entity 3 — Emergency Categories
+No patient recordings need to be stored.
 
-Optional but useful for deterministic application logic.
-
-Fields:
-
-id
-name
-display_name
-urgency_level
-instruction_template
-
-Example:
-
-severe_bleeding
-breathing_difficulty
-chest_pain
-trauma
-unconsciousness
-stroke_like_symptoms
-
-The category list should remain small for the MVP.
-
+20. External Services
 AI
 
-AI should be used in exactly four core places.
+Use one primary provider for:
 
-1. Speech understanding
-
-Speech is converted to text using a speech-to-text service.
-
-Example:
-
-"Mere bhai ka accident ho gaya hai..."
-
-becomes:
-
-"My brother had an accident..."
-
-or remains in the original language for processing.
-
-2. Multilingual understanding
-
-AI understands supported languages and maps different ways of describing the same emergency into a common internal representation.
-
-For example:
-
-"bahut khoon nikal raha hai"
-        ↓
-severe bleeding
-3. Emergency information extraction
-
-AI converts natural language into structured data.
-
-Example:
-
-{
-  "emergency_type": "severe_bleeding",
-  "urgency": "high"
-}
-
-Use structured output/schema validation wherever the selected AI service supports it.
-
-4. Natural-language response
-
-AI generates a short response in the user's language.
-
-The response should be:
-
-concise
-calm
-action-oriented
-non-diagnostic
-AI should NOT:
-determine actual hospital availability without data
-invent hospital capabilities
-independently choose a hospital without application logic
-provide definitive medical diagnoses
-control navigation
-make unsupported medical claims
-EXTERNAL SERVICES
-
-The exact providers should be finalized after checking hackathon rules, credits, and API availability.
-
-1. AI / LLM
-
-Primary candidate:
-
-OpenAI API
-
-Use for:
-
+speech-to-text
+emergency classification
 multilingual understanding
-structured emergency extraction
 response generation
+Maps
 
-Alternative:
+Use one provider for:
 
-Gemini
-Claude
+nearby hospitals
+maps
+routing
+distance/travel time
 
-Only one primary runtime LLM is needed.
-
-2. Speech-to-text
-
-Possible choices:
-
-OpenAI speech capabilities
-Google Cloud Speech-to-Text
-another approved speech API
-browser speech recognition for a rapid fallback
-
-Choose based on actual language accuracy and hackathon availability, not brand preference.
-
-3. Maps / Places
-
-Primary candidates:
+Possible providers:
 
 Google Maps Platform
 Mapbox
-OpenStreetMap-based services
+approved OpenStreetMap-based services
+Hospital data
 
-Required capabilities:
-
-nearby hospital/places search
-maps
-geolocation support
-routing/directions
-4. Hospital data
-
-Preferred order:
+Preferred source order:
 
 Organizer-provided verified dataset/API
-Official hospital data/API
-Trusted map/places provider
+Official/approved hospital data
+Maps/places provider
 Other permitted public data
+21. Error Handling
 
-Do not manufacture hospital capabilities for the demo.
+ERIS must handle common failures gracefully.
 
-5. Navigation
+Speech failure
 
-Use the selected maps provider or an external navigation deep link.
+"We couldn't understand the audio. Please try again."
 
-6. Hosting
+AI failure
 
-Use the fastest reliable deployment platform available to the team.
+"We couldn't understand the emergency. Please try again."
 
-Possible choices include:
+Location failure
 
-Vercel
-Netlify
-Cloudflare
-Render
-similar approved service
+"Location access is unavailable."
 
-The deployment provider is not a product feature; choose whichever gets the application online fastest.
+Hospital API failure
 
-RECOMMENDED TECHNICAL ARCHITECTURE
-                    USER
-                     │
-                     ▼
-              React Web App
-                     │
-          ┌──────────┴──────────┐
-          │                     │
-      Microphone               GPS
-          │                     │
-          ▼                     ▼
-    Speech-to-Text          User Location
-          │
-          ▼
-       Backend
-          │
-          ▼
-    AI / LLM Layer
-          │
-          ▼
- Structured Emergency Data
-          │
-          ▼
- Deterministic Application Logic
-          │
-       ┌──┴─────────────┐
-       │                │
-       ▼                ▼
- Hospital/Places       Routing
-       │                │
-       └───────┬────────┘
-               ▼
-        Ranked Hospitals
-               │
-               ▼
-          Map + Route
-               │
-               ▼
-             USER
-Recommended implementation
+"We're unable to retrieve nearby facilities right now."
 
-Frontend
+No suitable hospital
 
-React
-Vite
-Tailwind CSS
-shadcn/ui or equivalent component library
+"No suitable nearby emergency facility was found."
 
-Backend
+The application should never silently fail or display fabricated information.
 
-Node.js
-Express or lightweight API routes
+22. Demo Scenario
+Scenario
 
-Database
+A person witnesses a serious accident.
 
-Supabase/PostgreSQL only if needed
+They open ERIS and say in Hindi:
 
+"Mere bhai ka accident ho gaya hai aur bahut khoon nikal raha hai."
+
+ERIS:
+
+VOICE
+  ↓
+Speech-to-text
+  ↓
+Hindi understanding
+  ↓
+Severe bleeding detected
+  ↓
+High urgency
+  ↓
+Location detected
+  ↓
+Nearby hospitals searched
+  ↓
+Hospitals ranked
+  ↓
+Recommended hospital displayed
+  ↓
+Route displayed
+  ↓
+Navigate
+
+The entire demonstration should take approximately 60–90 seconds, leaving the remainder of a 2-minute pitch for explanation.
+
+23. Success Criteria
+
+The MVP is complete when the following works end-to-end.
+
+Voice
+ User can record voice.
+ Speech is converted to text.
+ At least two demo languages work reliably.
 AI
+ Emergency category is correctly extracted.
+ Urgency is correctly classified for prepared demo scenarios.
+ Structured output is validated.
+ AI does not present a definitive diagnosis.
+Location
+ User location can be obtained.
+ Location failure is handled.
+Hospitals
+ Nearby hospitals can be retrieved.
+ Hospital information comes from an actual data source.
+ At least three usable options can normally be displayed.
+Ranking
+ One hospital is clearly recommended.
+ Ranking uses deterministic application logic.
+ Distance/travel time is displayed where available.
+Map
+ User location is displayed.
+ Hospital location is displayed.
+ Route can be displayed or launched.
+Navigation
+ Navigate button successfully opens the selected navigation service.
+UX
+ Core flow can be completed without presenter intervention.
+ Loading states are clear.
+ Errors are handled.
+ Emergency action is immediately visible.
+Reliability
+ A fresh browser session can complete the prepared demo scenario.
+ Backend/API failures do not crash the frontend.
+ No fake medical or hospital information is presented.
+24. 24-Hour Development Priority
+P0 CORE FLOW
+│
+├── Emergency UI
+├── Voice recording
+├── Speech-to-text
+├── AI emergency classification
+├── Location
+├── Hospital search
+├── Ranking
+├── Map
+└── Navigation
+        │
+        ▼
+   TEST END-TO-END
+        │
+        ▼
+   FIX RELIABILITY
+        │
+        ▼
+   POLISH UI
+        │
+        ▼
+   P1 FEATURES
 
-One primary LLM API
-One speech-to-text service
+Rule: Do not start P1 features until the complete P0 flow works.
 
-Maps
+25. Product Principle
 
-One map/places/routing provider
+ERIS does not try to replace doctors, ambulances, or emergency services.
 
-Avoid building multiple backends or microservices.
+Its purpose is to reduce the friction between:
+
+"Something is wrong."
+
+and
+
+"I know where to go for emergency care."
+
+ERIS
+
+Speak. Understand. Find. Navigate.
